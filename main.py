@@ -119,7 +119,13 @@ def borrar_maquina():
     eliminar_vm = f'vboxmanage unregistervm "{nombre}" --delete >nul 2>&1'
 
     # VComprobar si existe la VM
-    existe_vm = 
+    existe_vm = f'vboxmanage showvminfo "{nombre}" >nul 2>&1'
+
+    resultado = os.system(existe_vm)
+
+    if resultado != 0:
+        print()
+
 
 
 
