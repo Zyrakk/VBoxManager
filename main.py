@@ -109,7 +109,31 @@ def crear_maquina():
         print("Error al crear o configurar la máquina virtual.")
 
 
+def borrar_maquina():
+
+    # Guardar parametros
+    nombre = input("Introduce el nombre de la maquina virtual que quieres borrar: ")
+
+    # Comandos
+    detener_vm = f'vboxmanage controlvm "{nombre}" poweroff >nul 2>&1'
+    eliminar_vm = f'vboxmanage unregistervm "{nombre}" --delete >nul 2>&1'
+
+    # VComprobar si existe la VM
+    existe_vm = 
+
+
+
+
 def menu():
+
+    # Comprobar que vboxmanage esta instalado y es accesible
+    comprobacion_vbox = os.system("vboxmanage --version >nul 2>&1")
+    
+    if comprobacion_vbox != 0:
+        print("VBoxManager no esta instalado o no es accesible.")
+        return
+
+    # Menu
     while True:
         print()
         print("------------- VirtualBox ---------------")
