@@ -18,13 +18,17 @@ def listar_maquinas():
 
 
 def clonar_maquina():
+
+    # Guardar parametros
     nombre = input("Introduce el nombre de la maquina que quieres clonar: ")
     nombre_nuevo = input("Introduce el nombre para la maquina clonada: ")
 
+    # Ejecutat el comando y guardar la salida
     clonar = f'vboxmanage clonevm {nombre} --name {nombre_nuevo} --register'
 
     salida = os.system(clonar)
 
+    # Verificaciones
     if salida == 0:
         print(f'La maquina {nombre} se ha clonado con exito.')
     else:
