@@ -146,7 +146,6 @@ def borrar_maquina():
 
 
 def menu():
-
     # Comprobar que vboxmanage esta instalado y es accesible
     comprobacion_vbox = os.system("vboxmanage --version >nul 2>&1")
     
@@ -166,7 +165,7 @@ def menu():
         print("6. Salir.")
         print("------------------------------------")
         print()
-        opc = int(input("Selecciona una opcion [1,2,3,4,5]: "))
+        opc = int(input("Selecciona una opcion [1,2,3,4,5,6]: "))
 
         match opc:
             case 1:
@@ -182,7 +181,7 @@ def menu():
             case 6:
                 break
             case _:
-                print("Introduce una opcion correcta: [1,2,3,4,5]")
+                print("Introduce una opcion correcta: [1,2,3,4,5,6]")
 
 
 if __name__ == "__main__":
