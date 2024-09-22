@@ -3,9 +3,9 @@ import os
 def listar_maquinas():
 
     # Guardamos el resultado del comando para listar maquinas en forma de texto
-    listar = 'vboxmanage list vms'
+    listar_vm = 'vboxmanage list vms'
 
-    proceso = os.popen(listar)
+    proceso = os.popen(listar_vm)
 
     resultado = proceso.read()
 
@@ -24,9 +24,9 @@ def clonar_maquina():
     nombre_nuevo = input("Introduce el nombre para la maquina clonada: ")
 
     # Ejecutat el comando y guardar la salida
-    clonar = f'vboxmanage clonevm {nombre} --name {nombre_nuevo} --register'
+    clonar_vm = f'vboxmanage clonevm {nombre} --name {nombre_nuevo} --register'
 
-    salida = os.system(clonar)
+    salida = os.system(clonar_vm)
 
     # Verificaciones
     if salida == 0:
@@ -87,8 +87,7 @@ def crear_maquina():
     # Crear un controlador IDE e instalar la imagen ISO
     ide_iso = (
         f'vboxmanage storagectl "{nombre}" --name "IDE Controller" --add ide && '
-        f'vboxmanage storageattach "{nombre}" --storagectl "IDE Controller" '
-        f'--port 0 --device 0 --type dvddrive --medium "{ruta_iso}"'
+        f'vboxmanage storageattach "{nombre}" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "{ruta_iso}"'
     )
     
     # Verificaciones
@@ -121,15 +120,29 @@ def borrar_maquina():
     # Comprobar si existe la VM
     existe_vm = f'vboxmanage showvminfo "{nombre}" >nul 2>&1'
 
-    resultado = os.system(existe_vm)
+    salida_existe = os.system(existe_vm)
 
-    if resultado != 0:
+    if salida_existe != 0:
         print(f'La maquina {nombre} no existe o no se puede acceder a ella.')
         return
     
-    # 
+    # Borrar la VM
+    salida_stop = os.system(detener_vm)
     
+    if salida_stop != 0:
+        print(f'La maquina {nombre} no se pudo detener, puede que ya este apagada.')
+        
+    salida_borrar = os.system(eliminar_vm)
+    
+    if salida_borrar == 0:
+        print(f'La maquina {nombre} se elimino correctamente.')
+    else:
+        print(f'La maquina {nombre} no se pudo eliminar.')       
 
+
+# Variables globales
+    #
+    #
 
 
 def menu():
@@ -149,7 +162,8 @@ def menu():
         print("2. Clonar una maquina virtual.")
         print("3. Iniciar una maquina.")
         print("4. Crear una maquina virtual.")
-        print("5. Salir.")
+        print("5. Borrar una maquina virtual.")
+        print("6. Salir.")
         print("------------------------------------")
         print()
         opc = int(input("Selecciona una opcion [1,2,3,4,5]: "))
@@ -164,6 +178,8 @@ def menu():
             case 4:
                 crear_maquina()
             case 5:
+                borrar_maquina()
+            case 6:
                 break
             case _:
                 print("Introduce una opcion correcta: [1,2,3,4,5]")
