@@ -140,11 +140,6 @@ def borrar_maquina():
         print(f'La maquina {nombre} no se pudo eliminar.')       
 
 
-# Variables globales
-    #
-    #
-
-
 def menu():
     # Comprobar que vboxmanage esta instalado y es accesible
     comprobacion_vbox = os.system("vboxmanage --version >nul 2>&1")
