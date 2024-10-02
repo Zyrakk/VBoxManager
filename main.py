@@ -2,11 +2,11 @@ import os
 
 def listar_maquinas():
 
-    # Guardamos el resultado del comando para listar maquinas en forma de texto
     listar_vm = 'vboxmanage list vms'
 
     proceso = os.popen(listar_vm)
 
+    # Guardamos el resultado del comando para listar maquinas en forma de texto
     resultado = proceso.read()
 
     proceso.close()
@@ -68,13 +68,24 @@ def crear_maquina():
     
     # Guardar parametros
     nombre = input("Introduce el nombre de la maquina virtual: ")
-    sistema_operativo = input("Introduce el tipo de sistema operativo (ej. Ubuntu_64, Windows10_64): ")
-    ram = input("Introduce la cantidad de RAM en MB: ")
-    size_disco = input("Introduce el tamaño para el disco en MB (20480 para 20G): ")
+    sistema_operativo = input("Introduce el tipo de sistema operativo (ej. Ubuntu_64, Windows10_64) (Dejar en blanco para ninguno): ")
+    ram = input("Introduce la cantidad de RAM en MB (Default 2GB): ")
+    size_disco = input("Introduce el tamaño para el disco en MB (Default 20GB): ")
     ruta_iso = input("Introduce la ruta completa de la imagen ISO (ej. C:\\ruta\\archivo.iso): ")
+
+    # Defaults
+    if not ram or not ram.strip():
+        ram = "2048"
+
+    if not size_disco or not size_disco.strip():
+        size_disco = "20480"
     
     # Crear la maquina y configurarla
-    crear_vm = f'vboxmanage createvm --name "{nombre}" --ostype {sistema_operativo} --register'
+    if sistema_operativo != '':
+        crear_vm = f'vboxmanage createvm --name "{nombre}" --ostype {sistema_operativo} --register'
+    else:
+        crear_vm = f'vboxmanage createvm --name "{nombre}" --register'
+
     config_vm = f'vboxmanage modifyvm "{nombre}" --memory {ram} --acpi on --boot1 dvd --nic1 nat'
     
     # Crear el disco virtual y conectarlo
