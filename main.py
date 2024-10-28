@@ -16,7 +16,6 @@ def listar_maquinas():
     print(resultado)
     print()
 
-
 def clonar_maquina():
 
     # Guardar parametros
@@ -34,9 +33,8 @@ def clonar_maquina():
     else:
         print(f'La maquina {nombre} no se ha podido clonar.')
 
-
 def iniciar_maquina():
-    
+
     # Elegir interfaz de inicio
     nombre = input("Introduce el nombre de la maquina a iniciar: ")
     print()
@@ -44,7 +42,7 @@ def iniciar_maquina():
     print("1. Con interfaz grafica.")
     print("2. Sin interfaz grafica.")
     opc = int(input("Elige una opcion [1,2]: "))
-    
+
     match opc:
         case 1:
             iniciar = f'vboxmanage startvm "{nombre}"'
@@ -54,18 +52,17 @@ def iniciar_maquina():
             print()
             print("Debes introducir 1 o 2.")
             return
-    
+
     # Guardar la salida del comando y verificar si se ejecuta correctamente
     salida = os.system(iniciar)
-        
+
     if salida == 0:
         print(f'La maquina {nombre} se ha iniciado con exito.')
     else:
         print(f'La maquina {nombre} no se ha podido iniciar.')
-    
 
 def crear_maquina():
-    
+
     # Guardar parametros
     nombre = input("Introduce el nombre de la maquina virtual: ")
     sistema_operativo = input("Introduce el tipo de sistema operativo (ej. Ubuntu_64, Windows10_64) (Dejar en blanco para ninguno): ")
@@ -79,7 +76,7 @@ def crear_maquina():
 
     if not size_disco or not size_disco.strip():
         size_disco = "20480"
-    
+
     # Crear la maquina y configurarla
     if sistema_operativo != '':
         crear_vm = f'vboxmanage createvm --name "{nombre}" --ostype {sistema_operativo} --register'
@@ -87,23 +84,23 @@ def crear_maquina():
         crear_vm = f'vboxmanage createvm --name "{nombre}" --register'
 
     config_vm = f'vboxmanage modifyvm "{nombre}" --memory {ram} --acpi on --boot1 dvd --nic1 nat'
-    
+
     # Crear el disco virtual y conectarlo
     disco_virtual = (
         f'vboxmanage createmedium disk --filename "{nombre}.vdi" --size {size_disco} && '
         f'vboxmanage storagectl "{nombre}" --name "SATA Controller" --add sata --controller IntelAHCI && '
         f'vboxmanage storageattach "{nombre}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "{nombre}.vdi'
     )
-    
+
     # Crear un controlador IDE e instalar la imagen ISO
     ide_iso = (
         f'vboxmanage storagectl "{nombre}" --name "IDE Controller" --add ide && '
         f'vboxmanage storageattach "{nombre}" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "{ruta_iso}"'
     )
-    
+
     # Verificaciones
     if (
-        os.system(crear_vm) == 0 
+        os.system(crear_vm) == 0
         and os.system(config_vm) == 0
         and os.system(disco_virtual) == 0
         and os.system(ide_iso) == 0
@@ -117,7 +114,6 @@ def crear_maquina():
         print(f'Ruta de la imagen ISO: {ruta_iso}')
     else:
         print("Error al crear o configurar la máquina virtual.")
-
 
 def borrar_maquina():
 
@@ -136,25 +132,24 @@ def borrar_maquina():
     if salida_existe != 0:
         print(f'La maquina {nombre} no existe o no se puede acceder a ella.')
         return
-    
+
     # Borrar la VM
     salida_stop = os.system(detener_vm)
-    
+
     if salida_stop != 0:
         print(f'La maquina {nombre} no se pudo detener, puede que ya este apagada.')
-        
+
     salida_borrar = os.system(eliminar_vm)
-    
+
     if salida_borrar == 0:
         print(f'La maquina {nombre} se elimino correctamente.')
     else:
-        print(f'La maquina {nombre} no se pudo eliminar.')       
-
+        print(f'La maquina {nombre} no se pudo eliminar.')
 
 def menu():
     # Comprobar que vboxmanage esta instalado y es accesible
     comprobacion_vbox = os.system("vboxmanage --version >nul 2>&1")
-    
+
     if comprobacion_vbox != 0:
         print("VBoxManager no esta instalado o no es accesible.")
         return
@@ -188,7 +183,6 @@ def menu():
                 break
             case _:
                 print("Introduce una opcion correcta: [1,2,3,4,5,6]")
-
 
 if __name__ == "__main__":
     menu()
