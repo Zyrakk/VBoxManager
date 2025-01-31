@@ -17,3 +17,9 @@ Antes de ejecutar el programa, asegúrate de tener instalado:
 
 - **Python 3.6+**
 - **VirtualBox** instalado y accesible desde la línea de comandos (`vboxmanage`)
+
+## ⚠️ Notas
+
+- Este programa utiliza os.system para ejecutar comandos de VirtualBox.
+- Solo funciona si VirtualBox está instalado correctamente y vboxmanage es accesible.
+- Para ejecutarlo en Windows, es posible que necesites agregar VirtualBox al PATH.
